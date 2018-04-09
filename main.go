@@ -120,10 +120,10 @@ func main() {
 }
 
 func defaultHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "We are up and running ;)")
+	fmt.Fprint(w, "<html><body>We are up and running ;)")
 	url, err := router.GetRoute("offert").URL("id", "test")
 	if err == nil {
-		fmt.Fprint(w, "<a href=\""+url.String()+"\">test</a>")
+		fmt.Fprint(w, "<a href=\""+url.RequestURI()+"\">test</a></body></html>")
 	}
 
 }
