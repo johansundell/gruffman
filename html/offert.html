@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Gruffman offerter</title>
+	</head>
+	<body>
+		<div>
+			{{.Item.Kundnamn}}<br/>
+			{{.Item.Regnr}}<br/>
+			{{.Item.Bilmodell}}<br/>
+			Mätarställning: {{.Item.Mätarställning}} km<br/>
+			Ordernr: {{.Item.Ordernummer}}<br/>
+		</div>
+		<div>
+		<table>
+			<thead>
+				<tr>
+					<th>Artikeltext</th>
+					<th>Antal</th>
+					<th>radsumma_inkmoms<th>
+				</tr>
+			<thead>
+			<tfoot>
+				<tr>
+					<td colspan="3">Totalsumma inkl moms: Att betala {{.Item.WebSummaSEK}} SEK</td>
+				</tr>
+			</tfoot>
+			<tbody>
+				{{range .Items}}
+				<tr>
+					<td>{{.WebArtikelText}}</td>
+					<td>{{.WebAntal}}</td>
+					<td>{{.WebRadSummaIncMoms}}</td>
+				</tr>
+				{{else}}
+				<tr>
+					<td colspan="3">Inga artikelrader på denna offert</td>
+				</tr>
+				{{end}}
+			</tbody>
+		</table>
+		</div>
+		<div>
+			
+		</div>
+	</body>
+</html>
