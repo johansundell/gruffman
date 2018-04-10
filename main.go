@@ -1,10 +1,14 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -18,6 +22,7 @@ type program struct {
 }
 
 const appVersionStr = "v1.0"
+const filenameSettings = "settings.json"
 
 var routes = Routes{
 	Route{
@@ -29,6 +34,14 @@ var routes = Routes{
 }
 
 var router *mux.Router
+var settings appSettings
+
+type appSettings struct {
+	FileMakerHost     string `json:"filemakerhost"`
+	FileMakerUser     string `json:"filemakeruser"`
+	FileMakerPassword string `json:"filemakerpassword"`
+	WebDomain         string `json:"webdomain"`
+}
 
 func (p *program) Start(s service.Service) error {
 	if service.Interactive() {
@@ -96,6 +109,23 @@ func main() {
 		log.Fatal(err)
 	}
 
+	ex, err := os.Executable()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	dir, _ := filepath.Split(ex)
+	dat, err := ioutil.ReadFile(dir + filenameSettings)
+	if err != nil {
+		data, _ := json.Marshal(settings)
+		ioutil.WriteFile(dir+filenameSettings, data, 0664)
+		log.Fatal("settings.json missing, " + err.Error())
+	}
+
+	if err := json.Unmarshal(dat, &settings); err != nil {
+		log.Fatal(err)
+	}
+
 	go func() {
 		for {
 			err := <-errs
@@ -123,7 +153,11 @@ func defaultHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "<html><body>We are up and running ;)")
 	url, err := router.GetRoute("offert").URL("id", "test")
 	if err == nil {
-		fmt.Fprint(w, "<a href=\""+url.RequestURI()+"\">test</a></body></html>")
+		fmt.Fprint(w, "<a href=\""+fixLink(url.RequestURI())+"\">test</a></body></html>")
 	}
 
+}
+
+func fixLink(part string) string {
+	return settings.FileMakerHost + part
 }
