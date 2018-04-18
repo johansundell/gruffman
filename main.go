@@ -41,6 +41,7 @@ type appSettings struct {
 	FileMakerUser     string `json:"filemakeruser"`
 	FileMakerPassword string `json:"filemakerpassword"`
 	WebDomain         string `json:"webdomain"`
+	Port              string `json:"port"`
 }
 
 func (p *program) Start(s service.Service) error {
@@ -62,7 +63,7 @@ func (p *program) run() error {
 	router = NewRouter()
 	srv := &http.Server{
 		Handler: router,
-		Addr:    ":8080",
+		Addr:    settings.Port,
 		// Good practice: enforce timeouts for servers you create!
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
@@ -151,7 +152,7 @@ func main() {
 
 func defaultHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "<html><body>We are up and running ;)")
-	url, err := router.GetRoute("offert").URL("id", "test")
+	url, err := router.GetRoute("offert").URL("id", "123")
 	if err == nil {
 		fmt.Fprint(w, "<a href=\""+fixLink(url.RequestURI())+"\">test</a></body></html>")
 	}
@@ -159,5 +160,14 @@ func defaultHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func fixLink(part string) string {
-	return settings.FileMakerHost + part
+	return settings.WebDomain + part
+}
+
+func getDir() (string, error) {
+	ex, err := os.Executable()
+	if err != nil {
+		return "", err
+	}
+	dir, _ := filepath.Split(ex)
+	return dir, nil
 }
