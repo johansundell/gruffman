@@ -1,23 +1,36 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Gruffman offerter</title>
-	</head>
+  <head>
+    <meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Grufman Bil AB - Offert</title>
+    <!-- Bootstrap -->
+	<link href="../media/css/bootstrap-4.0.0.css" rel="stylesheet">
+	<link href="../media/css/gbab.css" rel="stylesheet">
+  </head>
 	<body>
-		<div>
+  <div class="container-fluid, loggastuff">
+    <img src="../media/images/gbab-logo.png" width="300" height="80" alt=""/>
+  </div>
+  <div id="loggatext">
+		  OFFERT
+	  </div>
+	  
+		<div class="container-fluid, headerstuff">
 			{{.Item.Kundnamn}}<br/>
 			{{.Item.Regnr}}<br/>
 			{{.Item.Bilmodell}}<br/>
 			Mätarställning: {{.Item.Mätarställning}} km<br/>
 			Ordernr: {{.Item.Ordernummer}}<br/>
 		</div>
-		<div>
-		<table>
+		  <div class="container-fluid">
+			<table>
 			<thead>
 				<tr>
 					<th>Artikeltext</th>
 					<th>Antal</th>
-					<th>radsumma_inkmoms<th>
+					<th>Summa</th>
 				</tr>
 			<thead>
 			<tfoot>
@@ -39,11 +52,14 @@
 				{{end}}
 			</tbody>
 		</table>
-		</div>
-		<div>
 			<form action="{{.PostUrl}}" method="POST">
-				<button type="submit">Jag godkänner offert</button>
+				<button type="button" class="btn btn-primary">Jag godkänner offerten</button>
 			</form>
 		</div>
-	</body>
+		<footer class="footerstuff"></footer>
+		
+<script src="../media/js/jquery-3.2.1.min.js"></script>
+<script src="../media/js/popper.min.js"></script> 
+<script src="../media/js/bootstrap-4.0.0.js"></script>
+</body>
 </html>
