@@ -151,12 +151,7 @@ func main() {
 }
 
 func defaultHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "<html><body>We are up and running ;)")
-	url, err := router.GetRoute("offert").URL("id", "123")
-	if err == nil {
-		fmt.Fprint(w, "<a href=\""+fixLink(url.RequestURI())+"\">test</a></body></html>")
-	}
-
+	fmt.Fprint(w, "We are up and running ;)")
 }
 
 func fixLink(part string) string {
